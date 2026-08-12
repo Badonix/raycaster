@@ -1,5 +1,7 @@
 #include "game.hpp"
 #include "SDL2/SDL.h"
+#include <cmath>
+
 #define SCREEN_WIDTH 640
 #define SCREEN_HEIGHT 480
 
@@ -51,107 +53,135 @@ void Game::run(){
 }
 
 void Game::process_input(double frame_time){
-    SDL_Event e;
-    while (SDL_PollEvent(&e)) {
-      if (e.type == SDL_QUIT) is_running = false;
-    }
-    const Uint8* state = SDL_GetKeyboardState(nullptr);
-    if (state[SDL_SCANCODE_ESCAPE]) is_running = false;
-    double move_speed = frame_time * 5.0;
-    double rot_speed  = frame_time * 3.0;
-    if (state[SDL_SCANCODE_W]) player.move(move_speed, map);
-    if (state[SDL_SCANCODE_S]) player.move(-move_speed, map);
-    if (state[SDL_SCANCODE_A]) player.rotate(rot_speed);
-    if (state[SDL_SCANCODE_D]) player.rotate(-rot_speed);
+  SDL_Event e;
+  while (SDL_PollEvent(&e)) {
+    if (e.type == SDL_QUIT) is_running = false;
+  }
+  const Uint8* state = SDL_GetKeyboardState(nullptr);
+  if (state[SDL_SCANCODE_ESCAPE]) is_running = false;
+  double move_speed = frame_time * 5.0;
+  double rot_speed  = frame_time * 3.0;
+  if (state[SDL_SCANCODE_W]) player.move(move_speed, map);
+  if (state[SDL_SCANCODE_S]) player.move(-move_speed, map);
+  if (state[SDL_SCANCODE_A]) player.rotate(rot_speed);
+  if (state[SDL_SCANCODE_D]) player.rotate(-rot_speed);
 }
-void Game::render_frame() {
-    renderer.clear(0xFF000000);
-    int w = renderer.get_width();
-    int h = renderer.get_height();
-    for(int x = 0; x < w; x++){
-      double cameraX = 2 * x / double(w) - 1;
 
-      double rayX = cameraX * player.planeX + player.dirX;
-      double rayY = cameraX * player.planeY + player.dirY;
+Ray Game::create_ray(int x, int screen_width) const {
+  Ray ray;
+  double cameraX = 2.0 * x / double(screen_width) - 1.0;
 
-      int mapX = int(player.posX);
-      int mapY = int(player.posY);
+  ray.rayX = cameraX * player.planeX + player.dirX;
+  ray.rayY = cameraX * player.planeY + player.dirY;
 
-      double sideDistX;
-      double sideDistY;
+  ray.mapX = static_cast<int>(player.posX);
+  ray.mapY = static_cast<int>(player.posY);
 
-      double deltaDistX = (rayX == 0) ? 1e30 : abs(1 / rayX);
-      double deltaDistY = (rayY == 0) ? 1e30 : abs(1 / rayY);
+  ray.deltaDistX = (ray.rayX == 0) ? 1e30 : std::abs(1.0 / ray.rayX);
+  ray.deltaDistY = (ray.rayY == 0) ? 1e30 : std::abs(1.0 / ray.rayY);
 
-      int stepX;
-      int stepY;
+  if (ray.rayX < 0) {
+      ray.stepX = -1;
+      ray.sideDistX = (player.posX - ray.mapX) * ray.deltaDistX;
+  } else {
+      ray.stepX = 1;
+      ray.sideDistX = (ray.mapX + 1.0 - player.posX) * ray.deltaDistX;
+  }
 
-      if (rayX < 0){
-        stepX = -1;
-        sideDistX = (player.posX - mapX) * deltaDistX;
+  if (ray.rayY < 0) {
+      ray.stepY = -1;
+      ray.sideDistY = (player.posY - ray.mapY) * ray.deltaDistY;
+  } else {
+      ray.stepY = 1;
+      ray.sideDistY = (ray.mapY + 1.0 - player.posY) * ray.deltaDistY;
+  }
+
+  return ray;
+}
+
+RayHit Game::perform_dda(Ray ray) const {
+  RayHit hit;
+  int is_hit = 0;
+
+  while (is_hit == 0) {
+      if (ray.sideDistX < ray.sideDistY) {
+          ray.sideDistX += ray.deltaDistX;
+          ray.mapX += ray.stepX;
+          hit.side = 0;
       } else {
-        stepX = 1;
-        sideDistX = (mapX + 1.0 - player.posX) * deltaDistX;
+          ray.sideDistY += ray.deltaDistY;
+          ray.mapY += ray.stepY;
+          hit.side = 1;
       }
-
-      if (rayY < 0){
-        stepY = -1;
-        sideDistY = (player.posY - mapY) * deltaDistY;
-      }else{
-        stepY = 1;
-        sideDistY = (mapY + 1.0 - player.posY) * deltaDistY;
-      }     
-
-      double perpWallDist;
-      int hit = 0;
-      int side;
-      while (hit == 0)
-      {
-        if (sideDistX < sideDistY)
-        {
-          sideDistX += deltaDistX;
-          mapX += stepX;
-          side = 0;
-        }
-        else
-        {
-          sideDistY += deltaDistY;
-          mapY += stepY;
-          side = 1;
-        }
-        if (map[mapX][mapY] > 0) hit = 1;
-      } 
-
-      if(side == 0){
-        perpWallDist = (sideDistX - deltaDistX);
-      } else{
-        perpWallDist = (sideDistY - deltaDistY);
+      if (map[ray.mapX][ray.mapY] > 0) {
+          is_hit = 1;
       }
+  }
 
-      int lineHeight = (int)(h / perpWallDist);
-      int drawStart = -lineHeight / 2 + h / 2;
-      if(drawStart < 0) drawStart = 0;
-      int drawEnd = lineHeight / 2 + h / 2;
-      if(drawEnd >= h) drawEnd = h - 1;
+  hit.mapX = ray.mapX;
+  hit.mapY = ray.mapY;
+  hit.sideDistX = ray.sideDistX;
+  hit.sideDistY = ray.sideDistY;
+  hit.deltaDistX = ray.deltaDistX;
+  hit.deltaDistY = ray.deltaDistY;
 
-      uint32_t color;
-      switch(map[mapX][mapY])
-      {
-        case 1:  color = 0xFFFF0000;  break;
-        case 2:  color = 0xFF0000FF;  break;
-        case 3:  color = 0xFF00FF00;   break;
-        case 4:  color = 0xFFFFFFFF;  break;
-        default: color = 0xFF2504A4; break;
-      }
+  return hit;
+}
 
-      if (side == 1){
-        color = (color - 0xFF000000) / 2 + 0xFF000000;
-      }
+ColumnProjection Game::calculate_projection(const RayHit& hit, int screen_height) const {
+  ColumnProjection proj;
 
-      for(int i = drawStart; i < drawEnd; i++){
-        renderer.draw_pixel(x, i, color);
-      }
+  if (hit.side == 0) {
+      proj.perpWallDist = (hit.sideDistX - hit.deltaDistX);
+  } else {
+      proj.perpWallDist = (hit.sideDistY - hit.deltaDistY);
+  }
 
-    }
-    renderer.present();
+  proj.lineHeight = static_cast<int>(screen_height / proj.perpWallDist);
+  proj.drawStart = -proj.lineHeight / 2 + screen_height / 2;
+  if (proj.drawStart < 0) proj.drawStart = 0;
+
+  proj.drawEnd = proj.lineHeight / 2 + screen_height / 2;
+  if (proj.drawEnd >= screen_height) proj.drawEnd = screen_height - 1;
+
+  return proj;
+}
+
+uint32_t Game::select_wall_color(int tile_type, int side) const {
+  uint32_t color;
+  switch (tile_type) {
+      case 1:  color = 0xFFFF0000; break;
+      case 2:  color = 0xFF0000FF; break;
+      case 3:  color = 0xFF00FF00; break;
+      case 4:  color = 0xFFFFFFFF; break;
+      default: color = 0xFF2504A4; break;
+  }
+
+  if (side == 1) {
+      color = (color - 0xFF000000) / 2 + 0xFF000000;
+  }
+
+  return color;
+}
+
+void Game::draw_column(int x, const ColumnProjection& proj, uint32_t color) {
+  for (int i = proj.drawStart; i < proj.drawEnd; i++) {
+      renderer.draw_pixel(x, i, color);
+  }
+}
+
+void Game::render_frame() {
+  renderer.clear(0xFF000000);
+  int w = renderer.get_width();
+  int h = renderer.get_height();
+
+  for (int x = 0; x < w; x++) {
+      Ray ray = create_ray(x, w);
+      RayHit hit = perform_dda(ray);
+      ColumnProjection proj = calculate_projection(hit, h);
+      uint32_t color = select_wall_color(map[hit.mapX][hit.mapY], hit.side);
+      draw_column(x, proj, color);
+  }
+
+  renderer.present();
 }
