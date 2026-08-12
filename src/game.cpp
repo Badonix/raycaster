@@ -60,17 +60,98 @@ void Game::process_input(double frame_time){
     double move_speed = frame_time * 5.0;
     double rot_speed  = frame_time * 3.0;
     if (state[SDL_SCANCODE_W]) player.move(move_speed, map);
-    if (state[SDL_SCANCODE_S]) player.move(move_speed, map);
+    if (state[SDL_SCANCODE_S]) player.move(-move_speed, map);
     if (state[SDL_SCANCODE_A]) player.rotate(rot_speed);
     if (state[SDL_SCANCODE_D]) player.rotate(-rot_speed);
 }
 void Game::render_frame() {
-    renderer.clear(0xFF222222);
-    uint32_t whiteColor = 0xFFFFFFFF;
-    for (int y = 100; y < 150; ++y) {
-        for (int x = 100; x < 150; ++x) {
-            renderer.draw_pixel(x, y, whiteColor);
+    renderer.clear(0xFF000000);
+    int w = renderer.get_width();
+    int h = renderer.get_height();
+    for(int x = 0; x < w; x++){
+      double cameraX = 2 * x / double(w) - 1;
+
+      double rayX = cameraX * player.planeX + player.dirX;
+      double rayY = cameraX * player.planeY + player.dirY;
+
+      int mapX = int(player.posX);
+      int mapY = int(player.posY);
+
+      double sideDistX;
+      double sideDistY;
+
+      double deltaDistX = (rayX == 0) ? 1e30 : abs(1 / rayX);
+      double deltaDistY = (rayY == 0) ? 1e30 : abs(1 / rayY);
+
+      int stepX;
+      int stepY;
+
+      if (rayX < 0){
+        stepX = -1;
+        sideDistX = (player.posX - mapX) * deltaDistX;
+      } else {
+        stepX = 1;
+        sideDistX = (mapX + 1.0 - player.posX) * deltaDistX;
+      }
+
+      if (rayY < 0){
+        stepY = -1;
+        sideDistY = (player.posY - mapY) * deltaDistY;
+      }else{
+        stepY = 1;
+        sideDistY = (mapY + 1.0 - player.posY) * deltaDistY;
+      }     
+
+      double perpWallDist;
+      int hit = 0;
+      int side;
+      while (hit == 0)
+      {
+        if (sideDistX < sideDistY)
+        {
+          sideDistX += deltaDistX;
+          mapX += stepX;
+          side = 0;
         }
+        else
+        {
+          sideDistY += deltaDistY;
+          mapY += stepY;
+          side = 1;
+        }
+        if (map[mapX][mapY] > 0) hit = 1;
+      } 
+
+      if(side == 0){
+        perpWallDist = (sideDistX - deltaDistX);
+      } else{
+        perpWallDist = (sideDistY - deltaDistY);
+      }
+
+      int lineHeight = (int)(h / perpWallDist);
+      int drawStart = -lineHeight / 2 + h / 2;
+      if(drawStart < 0) drawStart = 0;
+      int drawEnd = lineHeight / 2 + h / 2;
+      if(drawEnd >= h) drawEnd = h - 1;
+
+      uint32_t color;
+      switch(map[mapX][mapY])
+      {
+        case 1:  color = 0xFFFF0000;  break;
+        case 2:  color = 0xFF0000FF;  break;
+        case 3:  color = 0xFF00FF00;   break;
+        case 4:  color = 0xFFFFFFFF;  break;
+        default: color = 0xFF2504A4; break;
+      }
+
+      if (side == 1){
+        color = (color - 0xFF000000) / 2 + 0xFF000000;
+      }
+
+      for(int i = drawStart; i < drawEnd; i++){
+        renderer.draw_pixel(x, i, color);
+      }
+
     }
     renderer.present();
 }
