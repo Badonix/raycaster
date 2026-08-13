@@ -5,7 +5,8 @@
 
 int main(int argc, char* argv[]) {
   SdlRenderer renderer;
-  Game game(renderer);
+  Texture textures;
+  Game game(renderer, textures);
   if(!game.init()){
     return 1;
   }

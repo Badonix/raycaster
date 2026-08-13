@@ -10,7 +10,6 @@ class IRenderer{
     virtual void draw_pixel(int x, int y, uint32_t color) = 0;
     virtual void present() = 0;
     virtual void cleanup() = 0;
-
     virtual int get_width() const = 0;
     virtual int get_height() const = 0;
 };

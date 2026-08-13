@@ -1,6 +1,7 @@
 #pragma once
 #include "irenderer.hpp"
 #include "player.hpp"
+#include "texture.hpp"
 
 struct Ray {
     double rayX;
@@ -23,18 +24,22 @@ struct RayHit {
     double sideDistY;
     double deltaDistX;
     double deltaDistY;
+    double perpWallDist;
+    int texX;
+    int texture;
 };
 
 struct ColumnProjection {
-    double perpWallDist;
     int lineHeight;
     int drawStart;
     int drawEnd;
+    int side;
 };
 
 class Game{
   private:
     IRenderer& renderer;
+    Texture& textures;
     bool is_running = false;
     Player player;
     static constexpr int MAP_WIDTH = 24;
@@ -48,9 +53,10 @@ class Game{
     ColumnProjection calculate_projection(const RayHit& hit, int screen_height) const;
     uint32_t select_wall_color(int tile_type, int side) const;
     void draw_column(int x, const ColumnProjection& proj, uint32_t color);
+    void draw_texture_column(int x, const ColumnProjection& proj, int texture, int wallX);
 
   public:
-    explicit Game(IRenderer& renderer);
+    explicit Game(IRenderer& renderer, Texture& textures);
     bool init();
     void run();
 };
