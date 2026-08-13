@@ -14,6 +14,7 @@ set(SOURCES
     src/player.cpp
     src/sdlrenderer.cpp
     src/texture.cpp
+    src/texture_loader.cpp
 )
 
 add_executable(Raycaster ${SOURCES})
