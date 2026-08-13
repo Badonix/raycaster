@@ -10,16 +10,6 @@ This project implements a pseudo-3D rendering engine similar to Wolfenstein 3D. 
 
 For every column of pixels on the screen, a ray is cast from the player's view plane into the 2D grid map. The engine uses Digital Differential Analysis (DDA) to calculate exact wall intersections, computes perpendicular wall distances to prevent fisheye distortion, samples texture coordinates, and streams the rasterized frame into a 32-bit ARGB pixel buffer.
 
-## Screenshots
-
-### Wolfenstein Textures
-![Wolfenstein Texture 1](readme/wolfenstein-1.png)
-![Wolfenstein Texture 2](readme/wolfenstein-2.png)
-
-### Procedural / Random Textures
-![Random Texture 1](readme/random-1.png)
-![Random Texture 2](readme/random-2.png)
-
 ## Features
 
 - DDA grid traversal algorithm for fast wall hit detection
@@ -38,8 +28,8 @@ For every column of pixels on the screen, a ray is cast from the player's view p
 ## Build Instructions
 
 ```bash
-cmake -B build -DCMAKE_BUILD_TYPE=Release
-cmake --build build --config Release
+cmake -B build
+cmake --build build
 ```
 
 Run executable:
@@ -53,3 +43,13 @@ Run executable:
 - `W` / `S`: Move forward / backward
 - `A` / `D`: Rotate left / right
 - `ESC`: Exit
+
+## Screenshots
+
+### Wolfenstein Textures
+![Wolfenstein Texture 1](readme/wolfenstein-1.png)
+![Wolfenstein Texture 2](readme/wolfenstein-2.png)
+
+### Procedural / Random Textures
+![Random Texture 1](readme/random-1.png)
+![Random Texture 2](readme/random-2.png)
