@@ -45,6 +45,7 @@ class Game{
     static constexpr int MAP_WIDTH = 24;
     static constexpr int MAP_HEIGHT = 24;
     static const int map[MAP_WIDTH][MAP_HEIGHT];
+    int current_fps = 0;
     void process_input(double frame_time);
     void render_frame();
 
