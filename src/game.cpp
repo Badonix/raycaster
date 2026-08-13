@@ -3,8 +3,8 @@
 #include "text_renderer.hpp"
 #include <cmath>
 
-#define SCREEN_WIDTH 640
-#define SCREEN_HEIGHT 480
+#define SCREEN_WIDTH 1200
+#define SCREEN_HEIGHT 800
 
 const int Game::map[24][24] = {
     {4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 7, 7, 7, 7, 7, 7, 7, 7},
