@@ -1,5 +1,5 @@
 #include "game.hpp"
-#include "SDL2/SDL.h"
+#include <SDL2/SDL.h>
 #include "text_renderer.hpp"
 #include <cmath>
 

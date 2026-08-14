@@ -1,4 +1,4 @@
-#include "SdlRenderer.hpp"
+#include "sdlrenderer.hpp"
 #include <algorithm>
 
 bool SdlRenderer::init(int width, int height, const char* title) {
