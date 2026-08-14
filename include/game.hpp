@@ -48,6 +48,8 @@ class Game{
     int current_fps = 0;
     void process_input(double frame_time);
     void render_frame();
+    void render_floor_and_ceiling();
+    void render_walls();
 
     Ray create_ray(int x, int screen_width) const;
     RayHit perform_dda(Ray ray) const;

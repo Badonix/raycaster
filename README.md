@@ -49,7 +49,3 @@ Run executable:
 ### Wolfenstein Textures
 ![Wolfenstein Texture 1](readme/wolfenstein-1.png)
 ![Wolfenstein Texture 2](readme/wolfenstein-2.png)
-
-### Procedural / Random Textures
-![Random Texture 1](readme/random-1.png)
-![Random Texture 2](readme/random-2.png)

@@ -7,31 +7,31 @@
 #define SCREEN_HEIGHT 800
 
 const int Game::map[24][24] = {
-    {4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 7, 7, 7, 7, 7, 7, 7, 7},
-    {4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 7},
-    {4, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7},
-    {4, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7},
-    {4, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 7},
-    {4, 0, 4, 0, 0, 0, 0, 5, 5, 5, 5, 5, 5, 5, 5, 5, 7, 7, 0, 7, 7, 7, 7, 7},
-    {4, 0, 5, 0, 0, 0, 0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 7, 0, 0, 0, 7, 7, 7, 1},
-    {4, 0, 6, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 5, 7, 0, 0, 0, 0, 0, 0, 8},
-    {4, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 7, 7, 1},
-    {4, 0, 8, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 5, 7, 0, 0, 0, 0, 0, 0, 8},
-    {4, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 5, 7, 0, 0, 0, 7, 7, 7, 1},
-    {4, 0, 0, 0, 0, 0, 0, 5, 5, 5, 5, 0, 5, 5, 5, 5, 7, 7, 7, 7, 7, 7, 7, 1},
-    {6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 0, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6},
-    {8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4},
-    {6, 6, 6, 6, 6, 6, 0, 6, 6, 6, 6, 0, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6},
-    {4, 4, 4, 4, 4, 4, 0, 4, 4, 4, 6, 0, 6, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3},
-    {4, 0, 0, 0, 0, 0, 0, 0, 0, 4, 6, 0, 6, 2, 0, 0, 0, 0, 0, 2, 0, 0, 0, 2},
-    {4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 2, 0, 0, 5, 0, 0, 2, 0, 0, 0, 2},
-    {4, 0, 0, 0, 0, 0, 0, 0, 0, 4, 6, 0, 6, 2, 0, 0, 0, 0, 0, 2, 2, 0, 2, 2},
-    {4, 0, 6, 0, 6, 0, 0, 0, 0, 4, 6, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 2},
-    {4, 0, 0, 5, 0, 0, 0, 0, 0, 4, 6, 0, 6, 2, 0, 0, 0, 0, 0, 2, 2, 0, 2, 2},
-    {4, 0, 6, 0, 6, 0, 0, 0, 0, 4, 6, 0, 6, 2, 0, 0, 5, 0, 0, 2, 0, 0, 0, 2},
-    {4, 0, 0, 0, 0, 0, 0, 0, 0, 4, 6, 0, 6, 2, 0, 0, 0, 0, 0, 2, 0, 0, 0, 2},
-    {4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 1, 1, 1, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3}};
-
+  {8,8,8,8,8,8,8,8,8,8,8,4,4,6,4,4,6,4,6,4,4,4,6,4},
+  {8,0,0,0,0,0,0,0,0,0,8,4,0,0,0,0,0,0,0,0,0,0,0,4},
+  {8,0,3,3,0,0,0,0,0,8,8,4,0,0,0,0,0,0,0,0,0,0,0,6},
+  {8,0,0,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6},
+  {8,0,3,3,0,0,0,0,0,8,8,4,0,0,0,0,0,0,0,0,0,0,0,4},
+  {8,0,0,0,0,0,0,0,0,0,8,4,0,0,0,0,0,6,6,6,0,6,4,6},
+  {8,8,8,8,0,8,8,8,8,8,8,4,4,4,4,4,4,6,0,0,0,0,0,6},
+  {7,7,7,7,0,7,7,7,7,0,8,0,8,0,8,0,8,4,0,4,0,6,0,6},
+  {7,7,0,0,0,0,0,0,7,8,0,8,0,8,0,8,8,6,0,0,0,0,0,6},
+  {7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,8,6,0,0,0,0,0,4},
+  {7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,8,6,0,6,0,6,0,6},
+  {7,7,0,0,0,0,0,0,7,8,0,8,0,8,0,8,8,6,4,6,0,6,6,6},
+  {7,7,7,7,0,7,7,7,7,8,8,4,0,6,8,4,8,3,3,3,0,3,3,3},
+  {2,2,2,2,0,2,2,2,2,4,6,4,0,0,6,0,6,3,0,0,0,0,0,3},
+  {2,2,0,0,0,0,0,2,2,4,0,0,0,0,0,0,4,3,0,0,0,0,0,3},
+  {2,0,0,0,0,0,0,0,2,4,0,0,0,0,0,0,4,3,0,0,0,0,0,3},
+  {1,0,0,0,0,0,0,0,1,4,4,4,4,4,6,0,6,3,3,0,0,0,3,3},
+  {2,0,0,0,0,0,0,0,2,2,2,1,2,2,2,6,6,0,0,5,0,5,0,5},
+  {2,2,0,0,0,0,0,2,2,2,0,0,0,2,2,0,5,0,5,0,0,0,5,5},
+  {2,0,0,0,0,0,0,0,2,0,0,0,0,0,2,5,0,5,0,5,0,5,0,5},
+  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5},
+  {2,0,0,0,0,0,0,0,2,0,0,0,0,0,2,5,0,5,0,5,0,5,0,5},
+  {2,2,0,0,0,0,0,2,2,2,0,0,0,2,2,0,5,0,5,0,0,0,5,5},
+  {2,2,2,2,1,2,2,2,2,2,2,1,2,2,2,5,5,5,5,5,5,5,5,5}
+};
 Game::Game(IRenderer &r, Texture &t) : renderer(r), textures(t) {}
 
 bool Game::init() {
@@ -233,8 +233,51 @@ void Game::draw_column(int x, const ColumnProjection &proj, uint32_t color) {
   }
 }
 
-void Game::render_frame() {
-  renderer.clear(0xFF000000);
+void Game::render_floor_and_ceiling() {
+  int screenWidth = renderer.get_width();
+  int screenHeight = renderer.get_height();
+
+  float rayDirX0 = player.dirX - player.planeX;
+  float rayDirY0 = player.dirY - player.planeY;
+  float rayDirX1 = player.dirX + player.planeX;
+  float rayDirY1 = player.dirY + player.planeY;
+
+  for (int y = screenHeight / 2 + 1; y < screenHeight; ++y) {
+    int p = y - screenHeight / 2;
+    float posZ = 0.5f * screenHeight;
+    float rowDistance = posZ / p;
+
+    float floorStepX = rowDistance * (rayDirX1 - rayDirX0) / screenWidth;
+    float floorStepY = rowDistance * (rayDirY1 - rayDirY0) / screenWidth;
+
+    float floorX = player.posX + rowDistance * rayDirX0;
+    float floorY = player.posY + rowDistance * rayDirY0;
+
+    for (int x = 0; x < screenWidth; ++x) {
+      int cellX = (int)(floorX);
+      int cellY = (int)(floorY);
+
+      int tx = (int)(textures.tex_width * (floorX - cellX)) & (textures.tex_width - 1);
+      int ty = (int)(textures.tex_height * (floorY - cellY)) & (textures.tex_height - 1);
+
+      floorX += floorStepX;
+      floorY += floorStepY;
+
+      int floorTexture = 3;
+      int ceilingTexture = 6;
+
+      uint32_t color = textures.get_texture_pixel(floorTexture, tx, ty);
+      color = ((color >> 1) & 0x7F7F7F) | 0xFF000000;
+      renderer.draw_pixel(x, y, color);
+
+      color = textures.get_texture_pixel(ceilingTexture, tx, ty);
+      color = ((color >> 1) & 0x7F7F7F) | 0xFF000000;
+      renderer.draw_pixel(x, screenHeight - y - 1, color);
+    }
+  }
+}
+
+void Game::render_walls() {
   int w = renderer.get_width();
   int h = renderer.get_height();
 
@@ -242,14 +285,17 @@ void Game::render_frame() {
     Ray ray = create_ray(x, w);
     RayHit hit = perform_dda(ray);
     ColumnProjection proj = calculate_projection(hit, h);
-    // uint32_t color = select_wall_color(map[hit.mapX][hit.mapY], hit.side);
-    // draw_column(x, proj, color);
     draw_texture_column(x, proj, hit.texture, hit.texX);
   }
+}
+
+void Game::render_frame() {
+  renderer.clear(0xFF000000);
+  render_floor_and_ceiling();
+  render_walls();
 
   std::string fps_text = "FPS " + std::to_string(current_fps);
-  TextRenderer::draw_string(renderer, fps_text, 10, 10, 2,
-                            0xFF00FF00);
+  TextRenderer::draw_string(renderer, fps_text, 10, 10, 2, 0xFF00FF00);
 
   renderer.present();
 }
